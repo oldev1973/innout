@@ -14,7 +14,7 @@
 <body>
     <header class="header">
         <div class="logo">
-            <i class="icofont-travelling mr-2"></i>
+            <i class="icofont-travelling mr-2 "></i>
             <span class="font-weight-light">In </span>
             <span class="font-weight-bold mx-2">N'</span>
             <span class="font-weight-light">Out</span>
