@@ -64,6 +64,19 @@ class Model
         }
     }
 
+    public function save()
+    {
+        $sql = "INSERT INTO " . static::$tableName . " ("
+            . implode(",", static::$columns) . ") VALUES (";
+
+        foreach (static::$columns as $column) {
+            $sql .= static::getFormatedValue($this->$column) . ",";
+        }
+        $sql[strlen($sql) - 1] = ')';
+        $id = Database::executeSQL($sql);
+        $this->id = $id;
+    }
+
     private static function getFilters($filters)
     {
         $sql = '';
