@@ -73,7 +73,6 @@ class Model
             $sql .= static::getFormatedValue($this->$column) . ",";
         }
         $sql[strlen($sql) - 1] = ')';
-        echo $sql . '<br>';
         $id = Database::executeSQL($sql);
         $this->id = $id;
     }
@@ -87,7 +86,6 @@ class Model
         }
         $sql[strlen($sql) - 1] = ' ';
         $sql .= " WHERE id = {$this->id}";
-        echo $sql . '<br>';
         Database::executeSQL($sql);
     }
     private static function getFilters($filters)

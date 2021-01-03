@@ -21,7 +21,11 @@ class WorkingHours extends Model
             $registry = new WorkingHours([
                 'user_id' => $userId,
                 'work_date' => $workDate,
-                'worked_time' => 0
+                'worked_time' => 0,
+                'time1' => null,
+                'time2' => null,
+                'time3' => null,
+                'time4' => null,
             ]);
         }
         return $registry;
@@ -34,6 +38,18 @@ class WorkingHours extends Model
         if (!$this->time3) return 'time3';
         if (!$this->time4) return 'time4';
         return null;
+    }
+
+    public function getActiveClock()
+    {
+        $nextTime = $this->getNextTime();
+        if ($nextTime === 'time1' || $nextTime === 'time3') {
+            return 'exitTime';
+        } elseif ($nextTime === 'time2' || $nextTime === 'time4') {
+            return 'workedInterval';
+        } else {
+            return null;
+        }
     }
 
     public function innout($time)
