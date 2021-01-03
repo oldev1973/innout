@@ -14,3 +14,5 @@ echo '<br>';
 $launchIntervalString = $wh->getLunchInterval()->format('%H:%I:%S');
 print_r($launchIntervalString);
 echo '<br>';
+
+print_r($wh->getExitTime());
