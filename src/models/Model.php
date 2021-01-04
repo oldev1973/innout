@@ -53,10 +53,12 @@ class Model
 
     public static function getResultSetFromSelect($filters = [], $columns = '*')
     {
+
         $sql = "SELECT $columns FROM "
             . static::$tableName
             . static::getFilters($filters);
         $result =  Database::getResultFromQuery($sql);
+        //$sql = '';
         if ($result->num_rows === 0) {
             return null;
         } else {
@@ -97,7 +99,7 @@ class Model
                 if ($column == 'raw') {
                     $sql .= " AND {$value}";
                 } else {
-                    $sql .= " AND $column = " . static::getFormatedValue($value);
+                    $sql .= " AND ${column} = " . static::getFormatedValue($value);
                 }
             }
         }
