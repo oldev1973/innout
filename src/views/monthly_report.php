@@ -1,3 +1,12 @@
-<?php
+<main class="content">
+    <?php
 
-print_r($registries);
+    renderTitle(
+        'Relatório Mensal',
+        'Acompanhe o seu saldo de horas',
+        'icofont-ui-calendar'
+    );
+    ?>
+
+    div
+</main>

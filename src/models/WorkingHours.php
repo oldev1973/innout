@@ -95,7 +95,6 @@ class WorkingHours extends Model
     {
         [$t1,,, $t4] = $this->getTimes();
         $workday = DateInterval::createFromDateString('8 hours');
-        // $defaultBreakInterval = DateInterval::createFromDateString('1 hour');
         if (!$t1) {
             return (new DateTimeImmutable())->add($workday);
         } elseif ($t4) {
