@@ -9,6 +9,15 @@
     ?>
 
     <div>
+        <form action="#" method="POST" class="mb-4">
+            <select name="period" class="form-control" placeholder="Selecione um período">
+                <?php
+                    foreach ($periods as $key => $month) {
+                        echo "<option value='{$key}'>{$month}</option>";
+                    }
+                ?>
+            </select>
+        </form>
         <table class="table table-bordered table-striped table-hover">
             <tr class="bg-primary text-white">
                 <td>Horas Tabalhadas</td>
