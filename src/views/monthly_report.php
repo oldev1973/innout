@@ -10,6 +10,14 @@
 
     <div>
         <table class="table table-bordered table-striped table-hover">
+            <tr class="bg-primary text-white">
+                <td>Horas Tabalhadas</td>
+                <td colspan="3"><?= $sumOfWorkedTime ?></td>
+                <td>Saldo Mensal</td>
+                <td><?= $balance ?></td>
+            </tr>
+        </table>
+        <table class="table table-bordered table-striped table-hover">
             <thead>
                 <th>Dia</th>
                 <th>Entrada 1</th>
@@ -21,20 +29,14 @@
             <tbody>
                 <?php foreach ($report as $registry) : ?>
                     <tr>
-                        <td><?= @$registry->work_date ?></td>
+                        <td><?= formatDateWithLocale(@$registry->work_date, '%A, %d de %B de %Y') ?></td>
                         <td><?= @$registry->time1 ?></td>
                         <td><?= @$registry->time2 ?></td>
                         <td><?= @$registry->time3 ?></td>
                         <td><?= @$registry->time4 ?></td>
-                        <td><?= 'saldo' ?></td>
+                        <td><?= @$registry->getBalance(); ?></td>
                     </tr>
                 <?php endforeach ?>
-                <tr class="bg-primary text-white">
-                    <td>Horas Tabalhadas</td>
-                    <td colspan="3"><?= $sumOfWorkedTime ?></td>
-                    <td>Saldo Mensal</td>
-                    <td><?= $balance ?></td>
-                </tr>
             </tbody>
         </table>
 
