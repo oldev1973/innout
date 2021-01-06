@@ -15,7 +15,7 @@ define('CONTROLLER_PATH', realpath(dirname(__FILE__) . '/../controllers'));
 define('EXCEPTION_PATH', realpath(dirname(__FILE__) . '/../exception'));
 
 //arquivos
-require_once(realpath(dirname(__FILE__) . '/database.php'));
+require_once(realpath(dirname(__FILE__) . '/Database.php'));
 require_once(realpath(dirname(__FILE__) . '/loader.php'));
 require_once(realpath(dirname(__FILE__) . '/session.php'));
 require_once(realpath(dirname(__FILE__) . '/date_util.php'));

@@ -33,10 +33,18 @@ class WorkingHours extends Model
 
     public function getNextTime()
     {
-        if (!$this->time1) return 'time1';
-        if (!$this->time2) return 'time2';
-        if (!$this->time3) return 'time3';
-        if (!$this->time4) return 'time4';
+        if (!$this->time1) {
+            return 'time1';
+        }
+        if (!$this->time2) {
+            return 'time2';
+        }
+        if (!$this->time3) {
+            return 'time3';
+        }
+        if (!$this->time4) {
+            return 'time4';
+        }
         return null;
     }
 
@@ -68,30 +76,42 @@ class WorkingHours extends Model
         }
     }
 
-    function getWorkedInterval()
+    public function getWorkedInterval()
     {
         [$t1, $t2, $t3, $t4] = $this->getTimes();
         $part1 = new DateInterval('PT0S');
         $part2 = new DateInterval('PT0S');
 
-        if ($t1) $part1 = $t1->diff(new DateTime());
-        if ($t2) $part1 = $t1->diff($t2);
-        if ($t3) $part2 = $t3->diff(new DateTime());
-        if ($t4) $part2 = $t3->diff($t4);
+        if ($t1) {
+            $part1 = $t1->diff(new DateTime());
+        }
+        if ($t2) {
+            $part1 = $t1->diff($t2);
+        }
+        if ($t3) {
+            $part2 = $t3->diff(new DateTime());
+        }
+        if ($t4) {
+            $part2 = $t3->diff($t4);
+        }
 
         return sumIntervals($part1, $part2);
     }
 
-    function getLunchInterval()
+    public function getLunchInterval()
     {
         [, $t2, $t3,] = $this->getTimes();
         $lunchInterval = new DateInterval('PT0S');
-        if ($t2) $lunchInterval = $t2->diff(new DateTime());
-        if ($t3) $lunchInterval = $t2->diff($t3);
+        if ($t2) {
+            $lunchInterval = $t2->diff(new DateTime());
+        }
+        if ($t3) {
+            $lunchInterval = $t2->diff($t3);
+        }
         return $lunchInterval;
     }
 
-    function getExitTime()
+    public function getExitTime()
     {
         [$t1,,, $t4] = $this->getTimes();
         $workday = DateInterval::createFromDateString('8 hours');
@@ -104,14 +124,50 @@ class WorkingHours extends Model
             return $t1->add($total);
         }
     }
-    function getBalance()
+    
+    public function getBalance()
     {
-        if (!$this->time1 && !isPastWorkDay($this->work_date)) return '';
-        if ($this->worked_time == DAILY_TIME) return '---';
+        if (!$this->time1 && !isPastWorkDay($this->work_date)) {
+            return '';
+        }
+        if ($this->worked_time == DAILY_TIME) {
+            return '---';
+        }
         $balance = $this->worked_time - DAILY_TIME;
         $balanceString = getTimeStringFromSeconds(abs($balance));
         $sign = $this->worked_time >= DAILY_TIME ? '+' : '-';
         return "{$sign}{$balanceString}";
+    }
+
+    public static function getAbsentUsers()
+    {
+        $today = new DateTime();
+        $result =Database::getResultFromQuery("
+            SELECT name From users 
+            WHERE end_date is null
+            AND id NOT IN (
+                SELECT user_id FROM working_hours
+                WHERE work_date = '{$today->format('Y-m-d')}'
+                AND time1 IS NOT NULL
+            )
+        ");
+        $absentUsers = [];
+        if ($result->num_rows > 0) {
+            while ($row=$result->fetch_assoc()) {
+                array_push($absentUsers, $row['name']);
+            }
+        }
+        return $absentUsers;
+    }
+
+    public static function getWorketTimeInMonth($yearAndMonth)
+    {
+        $startDate  = (new DateTime("{$yearAndMonth}-1"))->format('Y-m-d');
+        $endDate = getLastDayOfMonth($yearAndMonth)->format('Y-m-d');
+        $result = static::getResultSetFromSelect([
+            'raw' =>"work_date BETWEEN '{$startDate}' AND '{$endDate}'"
+        ], "sum(worked_time) as sum");
+        return $result->fetch_assoc()['sum'];
     }
 
     public static function getMonthlyReport($userId, $date)
