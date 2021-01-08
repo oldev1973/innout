@@ -29,7 +29,19 @@ class User extends Model
         if (!$this->end_date) {
             $this->end_date = null;
         }
+        $this->password = password_hash($this->password, PASSWORD_DEFAULT);
         return parent::insert();
+    }
+
+    public function update()
+    {
+        $this->validate();
+        $this->is_admin = $this->is_admin ? 1 : 0;
+        if (!$this->end_date) {
+            $this->end_date = null;
+        }
+        $this->password = password_hash($this->password, PASSWORD_DEFAULT);
+        return parent::update();
     }
 
     private function validate()
